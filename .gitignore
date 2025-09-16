@@ -1,7 +1,3 @@
-*key.txt
-*backend/key.txt
-*key.json
-*backend/key.json
 *.env
 
 # Logs

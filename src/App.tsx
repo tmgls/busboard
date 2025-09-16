@@ -1,6 +1,6 @@
 import {useState} from 'react';
+import getArrivals from '../backend/fetchArrivals';
 
-import getArrivals from '../backend/fetchArrivals.ts';
 function App() {
   return (
     <>
