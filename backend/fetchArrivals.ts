@@ -1,23 +1,15 @@
 import axios from 'axios';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 
+const key = import.meta.env.VITE_API_KEY;
 
 export default async function getArrivals(id: string){
-    let key;
-    try{
-        key = fs.readFileSync("./backend/key.txt");
-    } catch{
-        key = "";
-    }
     let url = `https://api.tfl.gov.uk/StopPoint/${id}/Arrivals`;
-    // try{
-    //    key = await fs.readFile("./backend/key.txt", 'utf-8', (err, data) => {if(err) throw err; return data;});
-    // } catch{
-    //     key = "";
-    // }
-    // if(key){
-    //     url = url + `?=${key}`;
-    // }
+   
+    if (key !== ""){
+        url = url + `?=${key}`;
+        console.log(key);
+    }
 
     try{
         const response = await axios.get(url);
