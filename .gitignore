@@ -1,3 +1,6 @@
+*key.txt
+*backend/key.txt
+
 # Logs
 logs
 *.log
