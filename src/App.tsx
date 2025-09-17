@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import getArrivals from '../backend/fetchArrivals';
+import {getArrivals, Bus} from '../backend/fetchArrivals';
 
 function App() {
   return (
@@ -12,24 +12,50 @@ function App() {
 }
 
 function Arrivals({id} : {id: string}) {
-  const [arrivalsData, setArrivalsData] = useState<string>();
+  const [arrivalsData, setArrivalsData] = useState<Bus[]>();
   
   async function handleClick(){
     let data = await getArrivals(id);
-    setArrivalsData(data);
+    if( data.success){
+      setArrivalsData(data.array);
+    }
   }
+
+  if (arrivalsData !== undefined){
+    return (
+      <>
+        <button
+        onClick = {handleClick}
+        >
+          Arrivals
+        </button>
+        <div>
+          {arrivalsData!.map((bus, index) => (
+            <BusCard busData={bus} />
+          ))}
+        </div>
+      </>
+    )}
+    else{
+      return (
+        <button
+        onClick = {handleClick}
+        >
+          Arrivals
+        </button>
+      );
+    }
+  }
+
+function BusCard({busData} : {busData : Bus}){
+  if (busData !== null && busData.lineName !== "")
   return (
-    <>
-      <button
-      onClick = {handleClick}
-      >
-        Arrivals
-      </button>
-      <div>
-        {arrivalsData}
-      </div>
-    </>
-  )
+  <>
+    <div>
+      {busData.lineName} to {busData.towards}
+    </div>
+  </>
+ )
 }
 
 export default App
