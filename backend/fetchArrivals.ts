@@ -51,7 +51,6 @@ export async function getArrivals(id: string){
     try{
         const response = await axios.get(url);
         let responseData = JSON.parse(JSON.stringify(response.data));
-        console.log(responseData);
 
         let busArray : Bus[] = [];
         responseData.forEach( (item : BusType) => {

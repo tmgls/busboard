@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, type FormEventHandler} from 'react';
 import {getArrivals, Bus} from '../backend/fetchArrivals';
 
 function App() {
@@ -6,15 +6,15 @@ function App() {
     <>
         <h1 className="text-3xl font-bold underline text-center text-cyan-600 m-4"
         >BusBoard</h1>
-        <Arrivals id={"490008660N"}/>
+        <Arrivals/>
     </>
   )
 }
 
-function Arrivals({id} : {id: string}) {
+function Arrivals() {
   const [arrivalsData, setArrivalsData] = useState<Bus[]>();
   
-  async function handleClick(){
+  async function handleGetArrivals(id: string){
     let data = await getArrivals(id);
     if( data.success){
       setArrivalsData(data.array);
@@ -24,28 +24,47 @@ function Arrivals({id} : {id: string}) {
   if (arrivalsData !== undefined){
     return (
       <>
-        <button
-        onClick = {handleClick}
-        >
-          Arrivals
-        </button>
+       <StopCodeForm onSubmit={handleGetArrivals}/>
         <div>
           {arrivalsData!.map((bus, index) => (
-            <BusCard busData={bus} />
+            <BusCard busData={bus} key={index} />
           ))}
         </div>
       </>
     )}
     else{
       return (
-        <button
-        onClick = {handleClick}
-        >
-          Arrivals
-        </button>
+       <StopCodeForm onSubmit={handleGetArrivals}/>
       );
     }
   }
+
+function StopCodeForm({onSubmit} : {onSubmit: Function}) {
+  const [stopCode, setStopCode] = useState<string>("");
+
+  const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setStopCode(event.currentTarget.value);
+  }
+
+  const handleSubmit = (event : React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); //prevent page frefresh
+    onSubmit(stopCode);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label> Enter a stop code:
+        <input 
+          type="text"
+          onChange={handleChange}
+          value={stopCode}
+        />
+      </label>
+      <input type="submit" value="Arrivals"/>
+    </form>
+  )
+}
 
 function BusCard({busData} : {busData : Bus}){
   if (busData !== null && busData.lineName !== "")
