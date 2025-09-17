@@ -64,7 +64,7 @@ function StopCodeForm({onSubmit} : {onSubmit: Function}) {
           value={stopCode}
         />
       </label>
-      <input type="submit" value="Arrivals"/>
+      <input type="submit" value="Arrivals" className="bg-blue-300 hover:bg-green-300 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"/>
     </form>
   )
 }
