@@ -26,7 +26,10 @@ function Arrivals() {
       <>
        <StopCodeForm onSubmit={handleGetArrivals}/>
         <div>
-          {arrivalsData!.map((bus, index) => (
+          {arrivalsData!
+          .sort((a: Bus, b : Bus) => a.timeToStation - b.timeToStation)
+          .slice(0, Math.min(arrivalsData.length, 5))
+          .map((bus, index) => (
             <BusCard busData={bus} key={index} />
           ))}
         </div>
@@ -71,7 +74,7 @@ function BusCard({busData} : {busData : Bus}){
   return (
   <>
     <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-row pt-1 pb-1 mt-3 mb-3">
-      {busData.lineName} to {busData.towards}
+      {busData.lineName} to {busData.towards} due in {Math.round(busData.timeToStation / 60)} minutes
     </div>
   </>
  )
