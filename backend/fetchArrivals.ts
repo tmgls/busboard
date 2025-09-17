@@ -1,18 +1,66 @@
 import axios from 'axios';
+import * as dfns from 'date-fns';
 
 const key = import.meta.env.VITE_API_KEY;
 
-export default async function getArrivals(id: string){
+export class Bus {
+    lineName: string;
+    destinationName : string;
+    towards: string;
+    expectedArrival: Date;
+    timeToStation: number
+
+    constructor(lineName = "Not given", destinationName = "Not given", towards = "Not given", expectedArrival = "2025-01-01T00:00:00Z", timeToStation = 1440) {
+        this.lineName = lineName;
+        this.destinationName = destinationName;
+        this.towards = towards;
+        this.expectedArrival = dfns.parseISO(expectedArrival);
+        this.timeToStation = timeToStation;
+    }
+
+    toString() {
+        return `${this.lineName} towards ${this.towards} expected at ${this.timeToStation}`;
+    }
+}
+
+export class BusArrayDto {
+    success: boolean;
+    array: Bus[];
+
+    constructor(success : boolean, array=[new Bus()]){
+        this.success = success;
+        this.array = array;
+    }
+}
+
+type BusType = {
+    lineName: string;
+    destinationName : string;
+    towards: string;
+    expectedArrival: string;
+    timeToStation: number
+}
+
+export async function getArrivals(id: string){
     let url = `https://api.tfl.gov.uk/StopPoint/${id}/Arrivals`;
    
     if (key){
-        url += `?app_key=${key}`, url;
+        url += `?app_key=${key}`;
     }
 
     try{
         const response = await axios.get(url);
-        return JSON.stringify(response.data);
+        let responseData = JSON.parse(JSON.stringify(response.data));
+        console.log(responseData);
+
+        let busArray : Bus[] = [];
+        responseData.forEach( (item : BusType) => {
+            busArray.push(new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
+        });
+
+        return new BusArrayDto(true, busArray);
     } catch (error){
-        return "500: Internal Server Error"
+        console.log(error);
+        return new BusArrayDto(false);
     }
 }
