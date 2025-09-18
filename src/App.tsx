@@ -26,10 +26,7 @@ function Arrivals() {
       <>
        <StopCodeForm onSubmit={handleGetArrivals}/>
         <div>
-          {arrivalsData!
-          .sort((a: Bus, b : Bus) => a.timeToStation - b.timeToStation)
-          .slice(0, Math.min(arrivalsData.length, 5))
-          .map((bus, index) => (
+          {arrivalsData!.map((bus, index) => (
             <BusCard busData={bus} key={index} />
           ))}
         </div>
