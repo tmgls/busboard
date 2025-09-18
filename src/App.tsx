@@ -70,14 +70,16 @@ function StopCodeForm({onSubmit} : {onSubmit: Function}) {
 }
 
 function BusCard({busData} : {busData : Bus}){
-  if (busData !== null && busData.lineName !== "")
-  return (
-  <>
-    <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-row pt-1 pb-1 mt-3 mb-3">
-      {busData.lineName} to {busData.towards} due in {Math.round(busData.timeToStation / 60)} minutes
-    </div>
-  </>
- )
+  if (busData !== null && busData.lineName !== ""){
+    let timeInMinues = Math.round(busData.timeToStation / 60);
+    return (
+    <>
+      <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-row pt-1 pb-1 mt-3 mb-3">
+        {busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues > 1 ? "minutes" : "minute"}
+      </div>
+    </>
+  )
+  }
 }
 
 export default App
