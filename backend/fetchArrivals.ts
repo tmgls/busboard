@@ -41,12 +41,10 @@ export async function getArrivals(id: string) : Promise<BusArrayDto>{
 
     try{
         const response = await axios.get(url);
-        let responseData = JSON.parse(JSON.stringify(response.data));
-
-        let busArray : Bus[] = [];
-        responseData.forEach( (item : BusType) => {
-            busArray.push(new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
-        });
+        let responseData = response.data;
+        
+        let busArray :Bus[] = responseData.map((item : BusType) =>
+             new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation));
 
         let filteredBusArray = busArray
             .sort((a: Bus, b : Bus) => a.timeToStation - b.timeToStation)
