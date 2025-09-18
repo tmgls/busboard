@@ -13,11 +13,15 @@ function App() {
 
 function Arrivals() {
   const [arrivalsData, setArrivalsData] = useState<Bus[]>();
+  const [errorMessage, setErrorMessage] = useState<string>();
   
   async function handleGetArrivals(id: string){
     let data = await getArrivals(id);
     if( data.success){
       setArrivalsData(data.array);
+    }
+    else{
+      setErrorMessage("No data found for stop code")
     }
   }
 
@@ -34,7 +38,10 @@ function Arrivals() {
     )}
     else{
       return (
-       <StopCodeForm onSubmit={handleGetArrivals}/>
+        <>
+          <p>{errorMessage}</p>
+        <StopCodeForm onSubmit={handleGetArrivals}/>
+        </>
       );
     }
   }
