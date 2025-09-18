@@ -15,12 +15,15 @@ export async function getLatLongByPostcode (postcode : string){
             url += `/${postcode}`;
             const response = await axios.get(url);
             let responseData = JSON.parse(JSON.stringify(response.data));
+            console.log(responseData);
 
-            if (responseData.longitude && responseData.latitude){
-                result = [true, responseData.longitude, responseData.latitude];
+            if (responseData.result.longitude !== undefined && responseData.result.latitude !== undefined){
+                result = [true, responseData.result.longitude, responseData.result.latitude];
+                console.log(result);
                 return result;
             }
             else{
+                console.log("failed if");
                 return result
             }
         }
