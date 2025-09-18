@@ -75,7 +75,7 @@ function BusCard({busData} : {busData : Bus}){
     return (
     <>
       <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-row pt-1 pb-1 mt-3 mb-3">
-        {busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues > 1 ? "minutes" : "minute"}
+        {busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}
       </div>
     </>
   )
