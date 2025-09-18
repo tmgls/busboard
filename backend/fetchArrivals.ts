@@ -17,31 +17,27 @@ export class Bus {
         this.expectedArrival = dfns.parseISO(expectedArrival);
         this.timeToStation = timeToStation;
     }
-
-    toString() {
-        return `${this.lineName} towards ${this.towards} expected at ${this.timeToStation}`;
-    }
 }
 
-export class BusArrayDto {
+export type BusArrayDto = {
     success: boolean;
-    array: Bus[];
+    array?: Bus[];
 
-    constructor(success : boolean, array=[new Bus()]){
-        this.success = success;
-        this.array = array;
-    }
+    // constructor(success : boolean, array=[new Bus()]){
+    //     this.success = success;
+    //     this.array = array;
+    // }
 }
 
-type BusType = {
-    lineName: string;
-    destinationName : string;
-    towards: string;
-    expectedArrival: string;
-    timeToStation: number
-}
+// type BusType = {
+//     lineName: string;
+//     destinationName : string;
+//     towards: string;
+//     expectedArrival: string;
+//     timeToStation: number
+// }
 
-export async function getArrivals(id: string){
+export async function getArrivals(id: string) : Promise<BusArrayDto>{
     let url = `https://api.tfl.gov.uk/StopPoint/${id}/Arrivals`;
    
     if (key){
@@ -53,13 +49,13 @@ export async function getArrivals(id: string){
         let responseData = JSON.parse(JSON.stringify(response.data));
 
         let busArray : Bus[] = [];
-        responseData.forEach( (item : BusType) => {
+        responseData.forEach( (item : any) => {
             busArray.push(new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
         });
 
-        return new BusArrayDto(true, busArray);
+        return {success: true, array: busArray};
     } catch (error){
         console.log(error);
-        return new BusArrayDto(false);
+        return {success: false};
     }
 }
