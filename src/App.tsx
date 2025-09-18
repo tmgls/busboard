@@ -39,8 +39,8 @@ function Arrivals() {
     else{
       return (
         <>
-          <p>{errorMessage}</p>
-        <StopCodeForm onSubmit={handleGetArrivals}/>
+          <h2>{errorMessage}</h2>
+          <StopCodeForm onSubmit={handleGetArrivals}/>
         </>
       );
     }
@@ -49,7 +49,7 @@ function Arrivals() {
 function StopCodeForm({onSubmit} : {onSubmit: Function}) {
   const [stopCode, setStopCode] = useState<string>("");
 
-  const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+  const handleStopCodeChange = (event : React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setStopCode(event.currentTarget.value);
   }
@@ -64,11 +64,13 @@ function StopCodeForm({onSubmit} : {onSubmit: Function}) {
       <label> Enter a stop code:
         <input 
           type="text"
-          onChange={handleChange}
+          onChange={handleStopCodeChange}
           value={stopCode}
         />
       </label>
-      <input type="submit" value="Arrivals" className="bg-blue-300 hover:bg-green-300 text-white font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"/>
+      <button type="submit" className="bg-blue-300 hover:bg-green-300 text-white font-semibold hover:text-white py-2 px-4 mb-3 border border-blue-500 hover:border-green-500 rounded">
+        Arrivals
+      </button>
     </form>
   )
 }
@@ -78,8 +80,8 @@ function BusCard({busData} : {busData : Bus}){
     let timeInMinues = Math.round(busData.timeToStation / 60);
     return (
     <>
-      <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-row pt-1 pb-1 mt-3 mb-3">
-        {busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}
+      <div className="max-w-sm rounded overflow-hidden shadow-lg">
+        <p>{busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}</p>
       </div>
     </>
   )
