@@ -11,11 +11,7 @@ export function NearestArrivals() {
   async function handleGetArrivals(postcode: string){
     let data = await getArrivalsByPostcode(postcode);
     if( data.success){
-      setArrivalsData([...data.array!]);
-      console.log("data set");
-      console.log(data.array);
-      console.log(arrivalsData);
-      console.log(!!arrivalsData);
+      setArrivalsData(data.array);
     }
     else{
       setErrorMessage("No data found for post code")
