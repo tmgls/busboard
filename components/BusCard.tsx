@@ -6,7 +6,7 @@ export function BusCard({busData} : {busData : Bus}){
     return (
     <>
       <div className="max-w-sm rounded overflow-hidden shadow-lg">
-        <p>{busData.lineName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}</p>
+        <p>{busData.lineName} from {busData.destinationName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}</p>
       </div>
     </>
   )
