@@ -11,7 +11,7 @@ function History(){
             </Link>
         </nav>
     </section>
-        <header className="bg-cyan-600 text-white py-6 text-center">
+        <header className="bg-cyan-600 text-white py-6 text-center mt-3">
             <h1 className="text-3xl font-bold">The History of London Buses</h1>
         </header>
 

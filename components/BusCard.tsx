@@ -8,7 +8,14 @@ export function BusCard({busData} : {busData : Bus}){
     <>
         <Link to="/History">
           <div className="max-w-sm rounded overflow-hidden shadow-sm mt-3 mb-1 hover:bg-blue-100">
-            <p>{busData.lineName} from {busData.destinationName} to {busData.towards} due in {timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}</p>
+            <p className="font-semibold">{busData.lineName} </p>
+              <p className="flex justify-between">
+                <span className="text-left">Stop: </span><span className='text-right'> {busData.destinationName}</span>
+              </p>
+              <p className="flex justify-between">
+                <span className="text-left">Destination: </span><span className='text-right'> {busData.towards}</span>
+              </p>
+            <p className='text-right'>{timeInMinues} {timeInMinues === 1 ? "minute" : "minutes"}</p>
           </div>
         </Link>
     </>
