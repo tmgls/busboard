@@ -18,8 +18,10 @@ export function StopCodeForm({onSubmit} : {onSubmit: Function}) {
       <label> Enter a stop code:
         <input 
           type="text"
+          dir="rtl"
           onChange={handleStopCodeChange}
           value={stopCode}
+          className='pr-1 mr-1'
         />
       </label>
       <button type="submit" className="bg-blue-300 hover:bg-green-300 text-white font-semibold hover:text-white py-2 px-4 mb-3 border border-blue-500 hover:border-green-500 rounded">
