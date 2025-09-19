@@ -64,12 +64,14 @@ export async function getArrivalsByPostcode(postcode: string) : Promise<BusArray
         let nearestStops = stopPointsArray.sort((a: stopType, b : stopType) => a.distance - b.distance)
             .slice(0, Math.min(stopPointsArray.length, 2));
 
-        nearestStops.forEach(async stop => {
-            let stopArrivals = await getArrivals(stop.naptanId);
-            if (stopArrivals.success){
-                busArray.push(...stopArrivals.array!);
-            }
-        })
+        const arrivalsPromises = nearestStops.map(async stop => {
+            const stopArrivals = await getArrivals(stop.naptanId);
+            return stopArrivals.success ? stopArrivals.array ?? [] : [];
+        });
+
+        const arrivalsArrays = await Promise.all(arrivalsPromises);
+        busArray = arrivalsArrays.flat();
+
         return {success: true, array: busArray};
     }
 }
