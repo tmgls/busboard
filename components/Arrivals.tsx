@@ -32,8 +32,8 @@ export function Arrivals() {
     else{
       return (
         <>
-          <h2>{errorMessage}</h2>
           <StopCodeForm onSubmit={handleGetArrivals}/>
+          <h2>{errorMessage}</h2>
         </>
       );
     }

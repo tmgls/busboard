@@ -20,13 +20,12 @@ export function NearestArrivals() {
 
     return (
       <>
+        <PostCodeForm onSubmit={handleGetArrivals}/>
         {!arrivalsData && 
           <>
-            <h2>errorstate</h2>
             <h2>{errorMessage}</h2>
           </>
         }
-        <PostCodeForm onSubmit={handleGetArrivals}/>
         {arrivalsData && 
           <div>
               {arrivalsData!.map((bus) => (
