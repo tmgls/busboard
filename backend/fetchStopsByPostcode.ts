@@ -2,8 +2,6 @@ import axios from 'axios';
 import * as dfns from 'date-fns';
 import { Bus, type BusArrayDto, getArrivals } from './fetchArrivals';
 
-
-//take a postcode and return a long lat NaptanBusCoachStation 
 async function getLatLongByPostcode (postcode : string){
     let url = "https://api.postcodes.io/postcodes";
 
@@ -69,7 +67,7 @@ export async function getArrivalsByPostcode(postcode: string) : Promise<BusArray
             return stopArrivals.success ? stopArrivals.array ?? [] : [];
         });
 
-        const arrivalsArrays = await Promise.all(arrivalsPromises);
+        const arrivalsArrays = await Promise.all(arrivalsPromises); //await here is blocking. Promise.all allows parallel awaiting
         busArray = arrivalsArrays.flat();
 
         return {success: true, array: busArray};
