@@ -1,6 +1,7 @@
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 function History(){
+    const {lineName} = useParams<{ lineName: string}>();
     return(
     <>
     <section>
@@ -12,10 +13,11 @@ function History(){
         </nav>
     </section>
         <header className="bg-cyan-600 text-white py-6 text-center mt-3">
-            <h1 className="text-3xl font-bold">The History of London Buses</h1>
+            <h2 className="text-3xl font-bold">The History of London Buses</h2>
         </header>
 
         <section className="max-w-3xl mx-auto px-4 py-10 space-y-6 text-gray-800 leading-relaxed">
+            <h3 className="font-bold">History of the {lineName}</h3>
             <p>
                 London’s iconic buses have come a long way since the 19th century. The first buses in London were actually horse-drawn and began operating in 1829, running from Paddington to the City of London.
             </p>

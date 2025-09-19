@@ -12,6 +12,7 @@ createRoot(document.getElementById('root')!).render(
     <Routes>
       <Route path="/" element={<BusBoard />}/>
       <Route path="/History" element={<History />}/>
+      <Route path="/Routehistory/:lineName" element={<History />}/>
     </Routes>`
     </BrowserRouter>
   </StrictMode>,
