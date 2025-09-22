@@ -6,6 +6,7 @@ import{BusCard} from './BusCard';
 export function Arrivals() {
   const [arrivalsData, setArrivalsData] = useState<Bus[]>();
   const [errorMessage, setErrorMessage] = useState<string>();
+
   
   async function handleGetArrivals(id: string){
     let data = await getArrivals(id);
@@ -17,23 +18,21 @@ export function Arrivals() {
     }
   }
 
-  if (arrivalsData !== undefined){
-    return (
-      <>
-       <StopCodeForm onSubmit={handleGetArrivals}/>
-        <div>
-          {arrivalsData!.map((bus, index) => (
-            <BusCard busData={bus} key={index} />
-          ))}
-        </div>
-      </>
-    )}
-    else{
-      return (
-        <>
-          <h2>{errorMessage}</h2>
-          <StopCodeForm onSubmit={handleGetArrivals}/>
-        </>
-      );
+  return (
+    <>
+    <StopCodeForm onSubmit={handleGetArrivals}/>
+    {!arrivalsData && 
+      <div>
+        <h2>{errorMessage}</h2>
+      </div>
     }
-  }
+    {arrivalsData && 
+      <div>
+        {arrivalsData!.map((bus) => (
+        <BusCard busData={bus} key={String(bus.destinationName) + String(bus.expectedArrival)} />
+        ))}
+      </div>
+    }
+    </>
+  );
+}
