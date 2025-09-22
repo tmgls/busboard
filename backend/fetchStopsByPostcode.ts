@@ -3,19 +3,18 @@ import * as dfns from 'date-fns';
 import { Bus, type BusArrayDto, getArrivals } from './fetchArrivals';
 
 async function getLatLongByPostcode (postcode : string){
-    let url = "https://api.postcodes.io/postcodes";
+    let url = `https://api.postcodes.io/postcodes/${postcode}`;
 
     postcode = postcode.replace(' ','');
-    let result: [boolean, number, number] = [false, 0, 0];
+    let result: LatLongResult = {success: false, longitude: 0, latitude: 0};
 
-    if (postcode !== undefined || postcode !== "" ){
+    if (postcode ){
         try{
-            url += `/${postcode}`;
             const response = await axios.get(url);
-            let responseData = JSON.parse(JSON.stringify(response.data));
+            let responseData = response.data;
 
             if (responseData.result.longitude !== undefined && responseData.result.latitude !== undefined){
-                result = [true, responseData.result.longitude, responseData.result.latitude];
+                result = {success: true,  longitude: responseData.result.longitude, latitude: responseData.result.latitude};
                 return result;
             }
             else{
@@ -31,9 +30,9 @@ async function getLatLongByPostcode (postcode : string){
 
 export async function getStopsByPostcode(postcode: string){
     const latLongResult = await getLatLongByPostcode(postcode);
-    if (latLongResult[0]){
-        const long = latLongResult[1];
-        const lat = latLongResult[2];
+    if (latLongResult.success){
+        const long = latLongResult.longitude;
+        const lat = latLongResult.latitude;
         const stopTypes = "NaptanPublicBusCoachTram";   //NaptanBusCoachStation
         const radius = 600;     //radius in meters
         const mode = "bus";
@@ -58,8 +57,8 @@ export async function getArrivalsByPostcode(postcode: string) : Promise<BusArray
     }
     else{
         let responseData;
-        const stopPointsArray : stopType[] = stopsResponse.stopPoints;
-        let nearestStops = stopPointsArray.sort((a: stopType, b : stopType) => a.distance - b.distance)
+        const stopPointsArray : StopType[] = stopsResponse.stopPoints;
+        let nearestStops = stopPointsArray.sort((a: StopType, b : StopType) => a.distance - b.distance)
             .slice(0, Math.min(stopPointsArray.length, 2));
 
         const arrivalsPromises = nearestStops.map(async stop => {
@@ -74,8 +73,14 @@ export async function getArrivalsByPostcode(postcode: string) : Promise<BusArray
     }
 }
 
-type stopType = {
+type StopType = {
     naptanId: string;
     commonName: string;
     distance: number;
+}
+
+type LatLongResult = {
+    success: boolean;
+    longitude: number;
+    latitude: number;
 }
