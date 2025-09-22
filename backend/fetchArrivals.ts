@@ -24,7 +24,7 @@ export type BusArrayDto = {
     array?: Bus[];
 }
 
-type BusType = {
+type BusJsonRaw = {
     lineName: string;
     destinationName : string;
     towards: string;
@@ -43,7 +43,7 @@ export async function getArrivals(id: string) : Promise<BusArrayDto>{
         const response = await axios.get(url);
         let responseData = response.data;
         
-        let busArray :Bus[] = responseData.map((item : BusType) =>
+        let busArray :Bus[] = responseData.map((item : BusJsonRaw) =>
              new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation));
 
         let filteredBusArray = busArray
