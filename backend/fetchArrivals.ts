@@ -40,7 +40,7 @@ export async function getArrivals(id: string) : Promise<BusArrayDto>{
     }
 
     try{
-        const response = await axios.get(url);
+        const response = await axios.get<BusJsonRaw[]>(url);
         let responseData = response.data;
         
         let busArray :Bus[] = responseData.map((item : BusJsonRaw) =>
