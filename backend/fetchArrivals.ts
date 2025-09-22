@@ -41,18 +41,21 @@ export async function getArrivals(id: string) : Promise<BusArrayDto>{
 
     try{
         const response = await axios.get<BusJsonRaw[]>(url);
-        let responseData = response.data;
+        const responseData = response.data;
         
         let busArray :Bus[] = responseData.map((item : BusJsonRaw) =>
-             new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation));
+             new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
+            .sort((a, b) => a.timeToStation - b.timeToStation)
+            .slice(0, 5);
 
-        let filteredBusArray = busArray
-            .sort((a: Bus, b : Bus) => a.timeToStation - b.timeToStation)
-            .slice(0, Math.min(busArray.length, 5));
-
-        return {success: true, array: filteredBusArray};
+        return {success: true, array: busArray};
     } catch (error){
-        console.log(error);
+        if (axios.isAxiosError(error)){
+            console.log("Axios error: " + error)
+        }
+        else{
+            console.log(error);
+        }
         return {success: false};
     }
 }
