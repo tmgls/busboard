@@ -18,8 +18,6 @@ export function Arrivals() {
     }
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   return (
     <>
     <StopCodeForm onSubmit={handleGetArrivals}/>
@@ -27,29 +25,6 @@ export function Arrivals() {
       <div>
         <h2>{errorMessage}</h2>
       </div>
-=======
-  if (arrivalsData !== undefined){
-=======
-  if (arrivalsData){
->>>>>>> 7d7993b (Refactor api methods)
-    return (
-      <>
-       <StopCodeForm onSubmit={handleGetArrivals}/>
-        <div>
-          {arrivalsData!.map((bus, index) => (
-          <BusCard busData={bus} key={String(bus.destinationName) + String(bus.expectedArrival)} />
-          ))}
-        </div>
-      </>
-    )}
-    else{
-      return (
-        <>
-          <StopCodeForm onSubmit={handleGetArrivals}/>
-          <h2>{errorMessage}</h2>
-        </>
-      );
->>>>>>> 1496275 (Change order of error message)
     }
     {arrivalsData && 
       <div>
