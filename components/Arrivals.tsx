@@ -19,6 +19,7 @@ export function Arrivals() {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   return (
     <>
     <StopCodeForm onSubmit={handleGetArrivals}/>
@@ -28,6 +29,9 @@ export function Arrivals() {
       </div>
 =======
   if (arrivalsData !== undefined){
+=======
+  if (arrivalsData){
+>>>>>>> 7d7993b (Refactor api methods)
     return (
       <>
        <StopCodeForm onSubmit={handleGetArrivals}/>
