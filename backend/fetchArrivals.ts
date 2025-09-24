@@ -19,43 +19,43 @@ export class Bus {
     }
 }
 
-export type BusArrayDto = {
-    success: boolean;
-    array?: Bus[];
-}
-
-type BusJsonRaw = {
-    lineName: string;
-    destinationName : string;
-    towards: string;
-    expectedArrival: string;
-    timeToStation: number
-}
-
 export async function getArrivals(id: string) : Promise<BusArrayDto>{
     let url = `https://api.tfl.gov.uk/StopPoint/${id}/Arrivals`;
-   
+    
     if (key){
         url += `?app_key=${key}`;
     }
-
+    
     try{
         const response = await axios.get<BusJsonRaw[]>(url);
         const responseData = response.data;
         
         let busArray :Bus[] = responseData.map((item : BusJsonRaw) =>
-             new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
+            new Bus(item.lineName, item.destinationName, item.towards, item.expectedArrival, item.timeToStation))
             .sort((a, b) => a.timeToStation - b.timeToStation)
             .slice(0, 5);
-
-        return {success: true, array: busArray};
-    } catch (error){
-        if (axios.isAxiosError(error)){
-            console.log("Axios error: " + error)
+            
+            return {success: true, array: busArray};
+        } catch (error){
+            if (axios.isAxiosError(error)){
+                console.log("Axios error: " + error)
+            }
+            else{
+                console.log(error);
+            }
+            return {success: false};
         }
-        else{
-            console.log(error);
-        }
-        return {success: false};
     }
-}
+
+    export type BusArrayDto = {
+        success: boolean;
+        array?: Bus[];
+    }
+    
+    type BusJsonRaw = {
+        lineName: string;
+        destinationName : string;
+        towards: string;
+        expectedArrival: string;
+        timeToStation: number
+    }

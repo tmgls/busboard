@@ -18,7 +18,7 @@ export function Arrivals() {
     }
   }
 
-  if (arrivalsData !== undefined){
+  if (arrivalsData){
     return (
       <>
        <StopCodeForm onSubmit={handleGetArrivals}/>

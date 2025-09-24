@@ -1,16 +1,19 @@
 import axios from 'axios';
-import * as dfns from 'date-fns';
 import { Bus, type BusArrayDto, getArrivals } from './fetchArrivals';
+
+const DEFAULT_STOP_TYPES = "NaptanPublicBusCoachTram";
+const DEFAULT_RADIUS_METRES = 600;
+const DEFAULT_MODE = "bus";
 
 async function getLatLongByPostcode (postcode : string){
     let url = `https://api.postcodes.io/postcodes/${postcode}`;
 
     postcode = postcode.replace(' ','');
-    let result: LatLongResult = {success: false, longitude: 0, latitude: 0};
+    let result: LatLongDto = {success: false, longitude: 0, latitude: 0};
 
-    if (postcode ){
+    if (postcode){
         try{
-            const response = await axios.get(url);
+            const response = await axios.get<LatLongResponse>(url);
             let responseData = response.data;
 
             if (responseData.result.longitude !== undefined && responseData.result.latitude !== undefined){
@@ -29,13 +32,13 @@ async function getLatLongByPostcode (postcode : string){
 }
 
 export async function getStopsByPostcode(postcode: string){
-    const latLongResult = await getLatLongByPostcode(postcode);
-    if (latLongResult.success){
-        const long = latLongResult.longitude;
-        const lat = latLongResult.latitude;
-        const stopTypes = "NaptanPublicBusCoachTram";   //NaptanBusCoachStation
-        const radius = 600;     //radius in meters
-        const mode = "bus";
+    const latLong : LatLongDto = await getLatLongByPostcode(postcode);
+    if (latLong.success){
+        const long = latLong.longitude;
+        const lat = latLong.latitude;
+        const stopTypes = DEFAULT_STOP_TYPES   //NaptanBusCoachStation
+        const radius = DEFAULT_RADIUS_METRES;     //radius in meters
+        const mode = DEFAULT_MODE;
 
         const base = "https://api.tfl.gov.uk/StopPoint/";
         const params = `?lat=${lat}&lon=${long}&stopTypes=${stopTypes}&radius=${radius}&modes=${mode}`;
@@ -58,15 +61,16 @@ export async function getArrivalsByPostcode(postcode: string) : Promise<BusArray
     else{
         let responseData;
         const stopPointsArray : StopType[] = stopsResponse.stopPoints;
-        let nearestStops = stopPointsArray.sort((a: StopType, b : StopType) => a.distance - b.distance)
-            .slice(0, Math.min(stopPointsArray.length, 2));
+        let nearestStops = stopPointsArray.sort((a, b) => a.distance - b.distance)
+            .slice(0, 2);
 
-        const arrivalsPromises = nearestStops.map(async stop => {
-            const stopArrivals = await getArrivals(stop.naptanId);
-            return stopArrivals.success ? stopArrivals.array ?? [] : [];
-        });
+        const arrivalsArrays = await Promise.all(
+            nearestStops.map(async stop => {
+                const stopArrivals = await getArrivals(stop.naptanId);
+                return stopArrivals.success ? stopArrivals.array ?? [] : [];
+            })
+        );
 
-        const arrivalsArrays = await Promise.all(arrivalsPromises); //await here is blocking. Promise.all allows parallel awaiting
         busArray = arrivalsArrays.flat();
 
         return {success: true, array: busArray};
@@ -79,8 +83,15 @@ type StopType = {
     distance: number;
 }
 
-type LatLongResult = {
+type LatLongDto = {
     success: boolean;
     longitude: number;
     latitude: number;
+}
+
+type LatLongResponse = {        //Object returned from postcodes api
+    result: {
+        longitude: number;
+        latitude: number;
+    }
 }
