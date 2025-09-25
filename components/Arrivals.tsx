@@ -17,7 +17,7 @@ export function Arrivals() {
       setErrorMessage("No data found for stop code")
     }
   }
-
+  
   return (
     <>
     <StopCodeForm onSubmit={handleGetArrivals}/>
