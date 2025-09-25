@@ -17,24 +17,22 @@ export function Arrivals() {
       setErrorMessage("No data found for stop code")
     }
   }
-
-  if (arrivalsData){
-    return (
-      <>
-       <StopCodeForm onSubmit={handleGetArrivals}/>
-        <div>
-          {arrivalsData!.map((bus, index) => (
-          <BusCard busData={bus} key={String(bus.destinationName) + String(bus.expectedArrival)} />
-          ))}
-        </div>
-      </>
-    )}
-    else{
-      return (
-        <>
-          <StopCodeForm onSubmit={handleGetArrivals}/>
-          <h2>{errorMessage}</h2>
-        </>
-      );
+  
+  return (
+    <>
+    <StopCodeForm onSubmit={handleGetArrivals}/>
+    {!arrivalsData && 
+      <div>
+        <h2>{errorMessage}</h2>
+      </div>
     }
-  }
+    {arrivalsData && 
+      <div>
+        {arrivalsData!.map((bus) => (
+        <BusCard busData={bus} key={String(bus.destinationName) + String(bus.expectedArrival)} />
+        ))}
+      </div>
+    }
+    </>
+  );
+}
